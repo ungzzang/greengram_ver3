@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.green.greengramver2.user.UserMapper">
+    <insert id="insUser" useGeneratedKeys="true" keyProperty="userId">
+        INSERT INTO user
+           SET uid = #{uid}
+             , upw = #{upw}
+             , nick_name = #{nickName}
+             , pic = #{pic}
+    </insert>
+
+    <select id="selUserByUid">
+        SELECT user_id as userId
+             , IFNULL(nick_name, uid) as nickName <!--닉네임 null이면 uid로-->
+             , upw, pic
+          FROM user
+         WHERE uid = #{uid} <!--#{파라미터로 String 같은거 보낼때는 여기 아무거나 가능}-->
+        <!--아이디가 문제인지 비밀번호가 문제인지 확인하려고 where에 아이디만 있음 -->
+    </select>
+</mapper>

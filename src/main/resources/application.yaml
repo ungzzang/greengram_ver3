@@ -1,0 +1,39 @@
+# custom property (???? Absolute Path)
+file:
+  directory: D:/mydownload/greengram_ver2
+
+default-page-size : 20
+
+# mybatis setting
+mybatis:
+  mapper-locations: mappers/**/*.xml
+
+
+spring:
+  application:
+    name: GreenGramVer2
+
+  # DB setting
+  Datasource:
+    url: jdbc:log4jdbc:mariadb://localhost/greengram_ver2
+    username: root
+    password: green502
+    driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
+
+  servlet:
+    multipart:
+      max-file-size: 15MB
+
+
+springdoc:
+  swagger_ui:
+    default-model-expand-depth: 10
+    display-request-duration:  true
+    operations-sorter: method
+    path: /swagger
+    groups-order: asc # ??(????? ???? ???? ??? ??? ?? ????)
+    tags-sorter:  alpha # ???? ?? ??
+
+  cache:
+    disabled: true # ??? ????, ????
+
