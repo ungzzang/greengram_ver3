@@ -5,4 +5,29 @@
 
 <mapper namespace="com.green.greengramver2.feed.FeedPicsMapper">
 
+    <!--foreach문 사용해서-->
+    <insert id="insFeedPics">
+        INSERT INTO feed_pics
+        (feed_id, pic)
+        VALUES
+        <foreach collection="pics" item="pic" open="(" close=")" separator="),(">
+            #{feedId}, #{pic}
+        </foreach>
+    </insert>
+
+    <!--위랑 결과가 같을꺼다 foreach 표현을 다르게했음-->
+    <insert id="insFeedPics2">
+        INSERT INTO feed_pics
+        (feed_id, pic)
+        VALUES
+        <foreach collection="pics" item="pic" separator=",">
+            (#{feedId}, #{pic})
+        </foreach>
+    </insert>
+
+    <select id="selFeedPics">
+        SELECT pic
+        FROM feed_pics
+        WHERE feed_id = #{feedId}
+    </select>
 </mapper>
