@@ -77,7 +77,7 @@ public class FeedService {
             item.setPics(feedPicsMapper.selFeedPics(item.getFeedId())); //여기서 (튜플 4개라면) 4 번 셀렉트
 
             //피드 당 댓글 4개(첫페이지) 가져오기
-            FeedCommentGetReq commentGetReq = new FeedCommentGetReq(item.getFeedId(), 0, 3);// 맵퍼한테 보낼꺼다.(feed_id와 페이지값 1), 생성자에서 feed_id랑 feedId 맵핑해놨다.
+            FeedCommentGetReq commentGetReq = new FeedCommentGetReq(item.getFeedId(), 0, 3);// 맵퍼한테 보낼꺼다.(feedId, startIdx, size), 생성자에서 feed_id랑 feedId 맵핑해놨다.
 
             /* 얘네는 bindParam, 생성자 쓸 때 필요없음.
             commentGetReq.setPage(1); //피드당 댓글 3개 들고오는 첫번째 페이지(startIdx, size 다 세팅됨)

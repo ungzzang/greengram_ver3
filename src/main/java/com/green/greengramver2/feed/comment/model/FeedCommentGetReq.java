@@ -19,10 +19,10 @@ public class FeedCommentGetReq {
     @Schema(title = "피드 pk", description = "피드 PK" , name = "feed_id", example = "1", requiredMode = Schema.RequiredMode.REQUIRED)
     private long feedId;
 
-    @Schema(title="튜플 시작 index", description = "댓글 Element 갯수를 보내주면 된다.", name="start_idx", example = "1", requiredMode = Schema.RequiredMode.REQUIRED)
+    @Schema(title= "튜플 시작 index", description = "댓글 Element 갯수를 보내주면 된다.", name="start_idx", example = "1", requiredMode = Schema.RequiredMode.REQUIRED)
     private int startIdx;
 
-    @Schema(title="페이지 당 아이템 수", description = "default: 20", example = "20")
+    @Schema(title= "페이지 당 아이템 수", description = "default: 20", example = "20")
     private int size;
 
     @ConstructorProperties({"feed_id", "start_idx", "size"})
@@ -31,8 +31,11 @@ public class FeedCommentGetReq {
         this.startIdx = startIdx;
         this.size = (size == null ? Constants.getDefault_page_size() : size) + 1;
     }
+}
 
-   /* //@BindParam 이용해서 프론트의 feed_id를 feedId로 맵핑시키려고 생성자 만들어서 사용한거(생성자에서 @BindParam 사용가능해서)
+
+//밑에는 버그 수정하기 전 코드들
+/* //@BindParam 이용해서 프론트의 feed_id를 feedId로 맵핑시키려고 생성자 만들어서 사용한거(생성자에서 @BindParam 사용가능해서)
     public FeedCommentGetReq(@BindParam("feed_id") long feedId, int page){
         this.feedId = feedId;
         setPage(page);
@@ -52,4 +55,3 @@ public class FeedCommentGetReq {
     }
     //다음댓글이 있는지 확인하려고 튜플 1개씩 더 보는거다.
     //+1해서 확인한거는 보지않고 다음 페이지 처음에 나타나는거다.(말그대로 확인용)*/
-}

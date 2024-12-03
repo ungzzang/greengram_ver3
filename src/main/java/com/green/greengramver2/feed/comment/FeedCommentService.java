@@ -23,7 +23,7 @@ public class FeedCommentService {
 
     public FeedCommentGetRes getFeedComment(FeedCommentGetReq p){
         FeedCommentGetRes res = new FeedCommentGetRes();//객체안의 멤버필드에 값 담으려고 객체선언함.
-        if(p.getStartIdx() < 0) {
+        if(p.getStartIdx() < 0) { //댓글 없다
             res.setCommentList(new ArrayList<>());
             return res;
         }
