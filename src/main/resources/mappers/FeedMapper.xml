@@ -17,7 +17,7 @@
              , b.user_id AS writerUserId
              , if(b.nick_name IS NULL, b.uid, b.nick_name) as writerNm <!--삼항식 if(a is null, b, c) a가 널이면 b, 아니면 c-->
              , b.pic as writerPic
-             , IF(c.feed_id IS NULL, 0, 1) as isLike
+             , IF(c.feed_id IS NULL, 0, 1) as isLike <!--1이면 좋아요 누른거-->
         FROM feed a
         JOIN user b
         ON a.writer_user_id = b.user_id

@@ -38,7 +38,7 @@ public class FeedController {
     @GetMapping
     @Operation(summary = "Feed 리스트", description = "loginUserId는 로그인한 사용자의 pk")
     public ResultResponse<List<FeedGetRes>> getFeedList(@ParameterObject @ModelAttribute FeedGetReq p) {
-        log.info("FeedController > getFeedList > p: {}", p);
+        log.info("FeedController > getFeedList > p: {}", p); //파라미터의 값을 찍어보자. 지금은 이런거 꼭 찍어보자
         List<FeedGetRes> list = service.getFeedList(p);
         //List<FeedGetRes> list = new ArrayList<>();
         return ResultResponse.<List<FeedGetRes>>builder()
