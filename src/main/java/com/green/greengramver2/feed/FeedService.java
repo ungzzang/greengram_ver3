@@ -72,20 +72,24 @@ public class FeedService {
     public List<FeedGetRes> getFeedList(FeedGetReq p) {
         // N + 1 이슈 발생
         List<FeedGetRes> list = feedMapper.selFeedList(p); //여기서 한 번 셀렉트
-        for(FeedGetRes item : list) {
+        for(FeedGetRes item : list) { //item에는 feed의 튜플들이 담긴다고 생각, feed_id 1번부터 쭉 반복한다.
             //피드 당 사진 리스트
             item.setPics(feedPicsMapper.selFeedPics(item.getFeedId())); //여기서 (튜플 4개라면) 4 번 셀렉트
 
-            //피드 당 댓글 4개
-            FeedCommentGetReq commentGetReq = new FeedCommentGetReq();// 맵퍼한테 보낼꺼다.
-            commentGetReq.setPage(1); //피드당 댓글 3개 들고오는 첫번째 페이지(startIdx, size 다 세팅됨)
-            commentGetReq.setFeedId(item.getFeedId());
+            //피드 당 댓글 4개(첫페이지) 가져오기
+            FeedCommentGetReq commentGetReq = new FeedCommentGetReq(item.getFeedId(), 0, 3);// 맵퍼한테 보낼꺼다.(feed_id와 페이지값 1), 생성자에서 feed_id랑 feedId 맵핑해놨다.
 
+            /* 얘네는 bindParam, 생성자 쓸 때 필요없음.
+            commentGetReq.setPage(1); //피드당 댓글 3개 들고오는 첫번째 페이지(startIdx, size 다 세팅됨)
+            commentGetReq.setFeedId(item.getFeedId());//피드당 피드아이디 넣기, feed테이블을 반복을 하니까 feedId 위에서 부터 담긴다. ex)feed_id 1번부터*/
+
+            //commentList 사이즈는 최소 0, 최대 4 (limit로 잘라서), 첫페이지의 댓글이 담긴다.
+            //FeedCommentDto에는 쿼리문 실행되면 나오는 결과를 담는다.(튜플이 여러개 나오니까 List 쓴거다)
             List<FeedCommentDto> commentList = feedCommentMapper.selFeedCommentList(commentGetReq);
 
             FeedCommentGetRes commentGetRes = new FeedCommentGetRes();
-            commentGetRes.setCommentList(commentList);
-            commentGetRes.setMoreComment(commentList.size() == 4); // 4개면 true, 4개 아니면 false
+            commentGetRes.setCommentList(commentList);//commentList에 담긴 댓글을 저 객체의 commentList에 담는다.
+            commentGetRes.setMoreComment(commentList.size() == commentGetReq.getSize()); // 4개면 true, 4개 아니면 false, (4 = commentGetReq.getSize() 와 같다)
 
             if(commentGetRes.isMoreComment()) {
                 commentList.remove(commentList.size() - 1);
@@ -94,4 +98,7 @@ public class FeedService {
         }
         return list;
     }
+
 }
+//내가 뽑은 튜플이 0개, 1개면 그냥 클래스, 2개 이상이면 List로 만든다.
+//내가 뽑은 튜플과 객체의 멤버필드명이 같아야 값을 넣어준다.

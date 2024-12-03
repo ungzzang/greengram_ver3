@@ -20,5 +20,5 @@ public class FeedGetRes {
         private int isLike;
 
         private List<String> pics;
-        private FeedCommentGetRes comment;
+        private FeedCommentGetRes comment; //댓글정보(주솟값)
 }

@@ -1,6 +1,6 @@
 package com.green.greengramver2.feed.comment;
 
-import com.green.greengramver2.feed.FeedService;
+import com.green.greengramver2.feed.comment.model.FeedCommentDelReq;
 import com.green.greengramver2.feed.comment.model.FeedCommentDto;
 import com.green.greengramver2.feed.comment.model.FeedCommentGetReq;
 import com.green.greengramver2.feed.comment.model.FeedCommentPostReq;
@@ -14,5 +14,7 @@ public interface FeedCommentMapper {
     //insert를 void로 해도 되긴한다.
     int insFeedComment(FeedCommentPostReq p);
 
-   List<FeedCommentDto> selFeedCommentList(FeedCommentGetReq p);
+    List<FeedCommentDto> selFeedCommentList(FeedCommentGetReq p);
+
+    int delFeedComment(FeedCommentDelReq p);
 }

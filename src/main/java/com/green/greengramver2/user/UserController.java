@@ -5,6 +5,7 @@ import com.green.greengramver2.user.model.UserSignInReq;
 import com.green.greengramver2.user.model.UserSignInRes;
 import com.green.greengramver2.user.model.UserSignUpReq;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -14,11 +15,12 @@ import org.springframework.web.multipart.MultipartFile;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("user")
+@Tag(name = "1. 회원", description = "sign-in / sign-out")
 public class UserController {
     private final UserService service;
 
     @PostMapping("sign-up")
-    @Operation(summary = "회원가임")
+    @Operation(summary = "회원가입")
     public ResultResponse<Integer> signUp(@RequestPart(required = false) MultipartFile pic, @RequestPart UserSignUpReq p){
         int result = service.signUp(pic, p);
 
