@@ -20,7 +20,8 @@ public class FeedLikeController {
     private final FeedLikeService service;
 
     @GetMapping
-    public ResultResponse<Integer> feedLikeToggle(@ParameterObject @ModelAttribute FeedLikeReq p){
+    public ResultResponse<Integer> feedLikeToggle(@ParameterObject
+                                                      @ModelAttribute FeedLikeReq p){
         log.info("FeedLikeController > feedLikeToggle > p: {}", p);
         int result = service.feedLikeToggle(p);
         return ResultResponse.<Integer>builder()
@@ -28,5 +29,4 @@ public class FeedLikeController {
                 .resultData(result)
                 .build();
     }
-
 }

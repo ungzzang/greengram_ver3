@@ -1,8 +1,10 @@
 package com.green.greengramver2.common;
 
+import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+@Getter
 @Component //빈등록
 public class Constants {
     private static int default_page_size;

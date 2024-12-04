@@ -36,6 +36,7 @@ public class FeedCommentController {
     // 쿼리스트링(프론트에서 백엔드로 주는 방식)
     // @ModelAttribute는 프론트가 값을 알아서 넣어라라고 하는데 지금 feedId가 프론트에서는 feed_id로 되어 있어서 안맞아서 생성자에서 @BindParam사용했음.
     // @RequestParam은 컨트롤러에서 쓰는거, 변수 하나하나 맞춰줄수 있음. 근데 변수 많아지면 불리해져서 객체로 보내는게 더 낫다.
+
     @GetMapping
     @Operation(summary = "피드 댓글 리스트", description = "댓글 더보기 처리 - 파라미터를 ModelAttribute를 이용해서 받음")
     public ResultResponse<FeedCommentGetRes> getFeedCommentList(@ParameterObject @ModelAttribute FeedCommentGetReq p){ //쌤픽

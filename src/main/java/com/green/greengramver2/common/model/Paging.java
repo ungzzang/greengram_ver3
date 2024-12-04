@@ -21,6 +21,4 @@ public class Paging {
         this.size = (size == null || size <= 0) ? Constants.getDefault_page_size() : size;
         this.startIdx = ( this.page - 1 ) * this.size;
     }
-    //setter 만들면 위에 생성자에서 page값이 들어왔다면 그건 보존하고 없는 값인 size값을 처리해준다.
-    //굳이 setter랑 생성자 같이 만들필요 없음
 }

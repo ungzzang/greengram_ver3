@@ -8,8 +8,10 @@ import lombok.Setter;
 @Setter
 @Schema(title = "피드 좋아요 Toggle") //토글 방식(insert와 delete가 번갈아가면서)
 public class FeedLikeReq {
-    @Schema(title = "피드 pk", example = "1", requiredMode = Schema.RequiredMode.REQUIRED)
+    @Schema(title = "피드 pk", example = "1"
+            , requiredMode = Schema.RequiredMode.REQUIRED)
     private long feedId;
-    @Schema(title = "유저 pk", example = "1", requiredMode = Schema.RequiredMode.REQUIRED)
+    @Schema(title = "유저 pk", example = "1"
+            , requiredMode = Schema.RequiredMode.REQUIRED)
     private long userId;
 }
