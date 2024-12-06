@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.green.greengram.feed.FeedPicMapper">
+
+    <!--foreach문 사용해서-->
+    <insert id="insFeedPic">
+        INSERT INTO feed_pic
+        (feed_id, pic)
+        VALUES
+        <foreach collection="pics" item="pic" open="(" close=")" separator="),(">
+            #{feedId}, #{pic}
+        </foreach>
+    </insert>
+
+    <!--위랑 결과가 같을꺼다 foreach 표현을 다르게했음-->
+    <insert id="insFeedPic2">
+        INSERT INTO feed_pic
+        (feed_id, pic)
+        VALUES
+        <foreach collection="pics" item="pic" separator=",">
+            (#{feedId}, #{pic})
+        </foreach>
+    </insert>
+
+    <select id="selFeedPic">
+        SELECT pic
+        FROM feed_pic
+        WHERE feed_id = #{feedId}
+    </select>
+</mapper>

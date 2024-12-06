@@ -4,7 +4,7 @@ const:
 
 # custom property (???? Absolute Path)
 file:
-  directory: D:/mydownload/greengram_ver2
+  directory: D:/mydownload/greengram_ver3
 
 
 
@@ -15,11 +15,11 @@ mybatis:
 
 spring:
   application:
-    name: GreenGramVer2
+    name: GreenGramVer3
 
   # DB setting
   Datasource:
-    url: jdbc:log4jdbc:mariadb://localhost/greengram_ver2
+    url: jdbc:log4jdbc:mariadb://localhost/greengram_ver3
     username: root
     password: green502
     driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy

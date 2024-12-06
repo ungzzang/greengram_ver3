@@ -32,16 +32,16 @@ dependencies {
     // https://mvnrepository.com/artifact/org.mindrot/jbcrypt
     implementation 'org.mindrot:jbcrypt:0.4'
 
-    // maven 에서 스프링독 검색 , swagger 라이브러리 추가
+    // swagger 라이브러리 추가, maven 에서 스프링독 검색
     // https://mvnrepository.com/artifact/org.springdoc/springdoc-openapi-starter-webmvc-ui
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0'
 
     implementation 'org.springframework.boot:spring-boot-starter-jdbc'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.3'
-    compileOnly 'org.projectlombok:lombok'
-    developmentOnly 'org.springframework.boot:spring-boot-devtools'
-    runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
+    compileOnly 'org.projectlombok:lombok' //compileOnly - 컴파일 할때 압축파일을 빼버린다.(서버 내렸다 올리는거 컴파일) 컴파일때 라이브러리는 필요없어서. 무겁다. //jar 버전으로
+    developmentOnly 'org.springframework.boot:spring-boot-devtools' //컴파일할때도 안쓴다. 가볍다. 개발할때 쓰는거
+    runtimeOnly 'org.mariadb.jdbc:mariadb-java-client' //실행할때 사용하는거, 빌드 때는 포함 안하고(자바때는 없다) 런타임 필요한 경우에만 라이브러리 프로젝트에 포함됨.
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter-test:3.0.3'

@@ -3,7 +3,7 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.green.greengramver2.user.UserMapper">
+<mapper namespace="com.green.greengram.user.UserMapper">
     <insert id="insUser" useGeneratedKeys="true" keyProperty="userId">
         INSERT INTO user
            SET uid = #{uid}
@@ -20,4 +20,33 @@
          WHERE uid = #{uid} <!--#{파라미터로 String 같은거 보낼때는 여기 아무거나 가능}-->
         <!--아이디가 문제인지 비밀번호가 문제인지 확인하려고 where에 아이디만 있음 -->
     </select>
+
+    <select id="selUserInfo">
+        SELECT A.user_id, A.pic, A.created_at AS createdAt
+            , IF(nick_name IS NULL, uid, nick_name) AS nickName
+            , COUNT(DISTINCT B.from_user_id, B.to_user_id) AS `follower`
+            , COUNT(DISTINCT C.from_user_id, C.to_user_id) AS `following`
+            , IFNULL(D.feedCnt, 0) AS feedCnt
+            , IFNULL(D.likeCnt, 0) AS likeCnt
+            , SUM(DISTINCT if(B.from_user_id = #{signedUserId}, 1, 0))
+            + SUM(DISTINCT if(C.to_user_id = #{signedUserId}, 2, 0)) AS followState
+        FROM user A
+        LEFT JOIN (
+          SELECT H.writer_user_id
+               , COUNT(DISTINCT H.feed_id) AS feedCnt
+               , COUNT(I.user_id) AS likeCnt
+            FROM feed H
+            LEFT JOIN feed_like I
+              ON H.feed_id = I.feed_id
+           WHERE H.writer_user_id = #{profileUserId}
+         ) D
+           ON A.user_id = D.writer_user_id
+         LEFT JOIN user_follow B
+           ON A.user_id = B.to_user_id
+         LEFT JOIN user_follow C
+           ON A.user_id = C.from_user_id
+        WHERE A.user_id = #{profileUserId}
+    </select>
+
+
 </mapper>

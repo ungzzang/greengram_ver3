@@ -3,7 +3,7 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.green.greengramver2.feed.like.FeedLikeMapper">
+<mapper namespace="com.green.greengram.feed.like.FeedLikeMapper">
 
     <insert id="insFeedLike">
         INSERT INTO feed_like
