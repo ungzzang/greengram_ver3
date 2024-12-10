@@ -47,7 +47,8 @@ public class UserController {
 
     @GetMapping
     @Operation(summary = "유저 프로필정보")
-    public ResultResponse<UserInfoGetRes> getUserInfo(@ParameterObject @ModelAttribute UserInfoGetReq p){
+    public ResultResponse<UserInfoGetRes> getUserInfo(@ParameterObject
+                                                          @ModelAttribute UserInfoGetReq p){
         log.info("UserController > getUserInfo > p: {}", p);
         UserInfoGetRes res = service.getUserInfo(p);
         return ResultResponse.<UserInfoGetRes>builder()

@@ -4,11 +4,13 @@ import com.green.greengram.feed.comment.model.FeedCommentGetRes;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.util.List;
 
 @Getter
 @Setter
+@ToString
 @Schema(title = "피드 정보")
 public class FeedGetRes {
         @Schema(title = "피드 PK")

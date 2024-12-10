@@ -34,4 +34,25 @@
         AND user_id = #{userId}
     </delete>
 
+    <select id="selFeedCommentListByFeedIdsLimit4">
+        SELECT T.feedId, T.feedCommentId, T.comment, T.writerUserId, T.writerNm, T.writerPic
+        FROM (
+        SELECT ROW_NUMBER() OVER (PARTITION BY A.feed_id ORDER BY A.feed_id, A.feed_comment_id DESC) AS num
+        , A.feed_id AS feedId
+        , A.feed_comment_id AS feedCommentId
+        , A.comment
+        , B.user_id AS writerUserId
+        , IF(B.nick_name IS NULL, B.uid, B.nick_name) AS writerNm
+        , B.pic AS writerPic
+        FROM feed_comment A
+        INNER JOIN user B
+        ON A.user_id = B.user_id
+        WHERE A.feed_id IN
+        <foreach collection="feedIds" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        ) T
+        WHERE T.num <![CDATA[ <= ]]> 4
+    </select>
+
 </mapper>
