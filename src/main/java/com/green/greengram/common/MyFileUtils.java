@@ -14,6 +14,10 @@ import java.util.UUID;
 public class MyFileUtils {
     private final String uploadPath;
 
+    public String getUploadPath() {
+        return uploadPath;
+    }
+
     public MyFileUtils(@Value("${file.directory}") String uploadPath) {
         log.info("MyFileUtiles - 생성자: {}", uploadPath);
         this.uploadPath = uploadPath;
@@ -52,5 +56,21 @@ public class MyFileUtils {
     public void transferTo(MultipartFile multipartFile, String path) throws IOException {
         File file = new File(uploadPath, path); //2개의 경로 합친다.
         multipartFile.transferTo(file);
+    }
+
+    //폴더 삭제, e.g. "user/1"
+    public void deleteFolder(String path, boolean deleteRootFolder){
+        File folder = new File(path);
+        if(folder.exists() && folder.isDirectory()) { //폴더가 존재하면서 디렉토리인가?
+            File[] includedFiles = folder.listFiles(); //폴더와 파일이 담긴다.
+
+            for(File f : includedFiles) {
+                if(f.isDirectory()) { // 디렉토리면 재귀호출
+                    deleteFolder(f.getAbsolutePath(), true);
+                } else {
+                    f.delete();
+                }
+            }
+       }
     }
 }

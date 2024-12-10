@@ -105,6 +105,20 @@ public class FeedService {
         return list;
     }
 
+    @Transactional
+    public int deleteFeed(FeedDeleteReq p) {
+        //피드 사진 삭제
+        String deletePath = String.format("%s/feed/%d", myFileUtils.getUploadPath(), p.getFeedId());
+        myFileUtils.deleteFolder(deletePath, true);
+
+        //피드 댓글, 좋아요 삭제
+        int affectedRows = feedMapper.delFeedLikeAndFeedCommentAndFeedPic(p);
+        log.info("affectedRows: {}", affectedRows);
+
+        //피드 삭제
+        return feedMapper.delFeed(p);
+    }
+
 }
 //내가 뽑은 튜플이 0개, 1개면 그냥 클래스, 2개 이상이면 List로 만든다.
 //내가 뽑은 튜플과 객체의 멤버필드명이 같아야 값을 넣어준다.

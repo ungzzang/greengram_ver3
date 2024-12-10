@@ -24,8 +24,12 @@
         LEFT JOIN feed_like c <!--feed안에 컬럼 다 나오게 하려고(null도) LEFT JOIN-->
         ON a.feed_id = c.feed_id
         AND c.user_id = #{signedUserId}
+        <if test = "profileUserId != null">
+            WHERE a.writer_user_id = #{profileUserId}
+        </if>
         ORDER BY a.feed_id desc
         LIMIT #{startIdx}, #{size}
+
     </select>
 
     <!-- 좋아요 처리하기 전
@@ -41,5 +45,26 @@
         LIMIT #{startIdx}, #{size}
     </select>
     -->
+
+    <delete id="delFeedLikeAndFeedCommentAndFeedPic">
+        DELETE B, C, D
+        FROM feed A
+        LEFT JOIN feed_like B
+        ON A.feed_id = B.feed_id
+        LEFT JOIN feed_comment C
+        ON A.feed_id = C.feed_id
+        LEFT JOIN feed_pic D
+        ON A.feed_id = D.feed_id
+        WHERE A.feed_id = #{feedId}
+        AND A.writer_user_id = #{signedUserId}
+    </delete>
+
+    <delete id="delFeed">
+        DELETE FROM feed
+        WHERE feed_id = #{feedId}
+        AND writer_user_id = #{signedUserId}
+    </delete>
+
+
 
 </mapper>

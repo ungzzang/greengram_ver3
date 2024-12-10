@@ -21,6 +21,8 @@
         <!--아이디가 문제인지 비밀번호가 문제인지 확인하려고 where에 아이디만 있음 -->
     </select>
 
+
+    <!-- 서브쿼리 사용한거 -->
     <select id="selUserInfo">
         SELECT A.user_id, A.pic, A.created_at AS createdAt
             , IF(nick_name IS NULL, uid, nick_name) AS nickName
@@ -48,5 +50,37 @@
         WHERE A.user_id = #{profileUserId}
     </select>
 
+    <!-- 최종(서브쿼리 사용안한거) -->
+    <select id="selUserInfo2">
+        SELECT A.user_id AS userId, A.pic, A.created_at AS createdAt
+        , IF(A.nick_name IS NULL, A.uid, A.nick_name) AS nickName
+        , COUNT(DISTINCT F1.from_user_id, F1.to_user_id) AS `follower`
+        , COUNT(DISTINCT F2.from_user_id, F2.to_user_id) AS `following`
+        , COUNT(DISTINCT F3.feed_id) AS feedCount
+        , COUNT(DISTINCT F4.feed_id, F4.user_id) AS myFeedLikeCount <!-- 프로필유저가 쓴 피드의 좋아요 -->
+        , MAX(IF(F1.from_user_id = #{signedUserId}, 1, 0))
+        + MAX(IF(F2.to_user_id = #{signedUserId}, 2, 0)) AS followState
+        FROM user A
+        LEFT JOIN user_follow F1
+          ON A.user_id = F1.to_user_id  <!-- 프로필 사용자를 팔로잉한 다른 사용자 -->
+        LEFT JOIN user_follow F2
+          ON A.user_id = F2.from_user_id <!-- 프로필 사용자가 팔로잉한 다른 사용자 -->
+        LEFT JOIN feed F3
+          ON A.user_id = F3.writer_user_id <!-- 프로필 사용자가 작성한 피드 -->
+        LEFT JOIN feed_like F4
+          ON F3.feed_id = F4.feed_id <!-- 프로필 사용자의 피드의 좋아요 정보 -->
+        WHERE A.user_id = #{profileUserId}
+    </select>
+
+    <update id="updUserPic">
+       UPDATE user
+        <set>
+            <if test="picName != null">
+                pic = #{picName}
+            </if>
+        </set>
+
+        WHERE user_id = #{signedUserId}
+    </update>
 
 </mapper>

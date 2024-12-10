@@ -16,12 +16,18 @@ public class FeedGetReq extends Paging {
     @Schema(title = "로그인 유저 PK", name = "signed_user_id", example = "1", requiredMode = Schema.RequiredMode.REQUIRED)
     private long signedUserId; //로그인한 사용자의 pk를 받음(사용자가 좋아요를 눌렀는지 보려고)
 
+    @Schema(title = "프로필 유저 PK", name = "profile_user_id", example = "1", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+    private Long profileUserId;
+
     //@ConstructorProperties({"page", "size", "signed_user_id"}) 많은양을 저렇게 보내고 싶을때,쿼리스트링으로 보낼때
     //@BindParam - 파라미터 각각 바꾸고 싶을때, key값은 카멜케이스기법을 주로 사용.
     //날아온 key와 받고싶은 멤버필드명이 다를때 맵핑하려고 사용.
-    public FeedGetReq(Integer page, Integer size, @BindParam("signed_user_id") long signeduserId) {
+    public FeedGetReq(Integer page, Integer size
+            , @BindParam("signed_user_id") long signeduserId
+            , @BindParam("profile_user_id") Long profileUserId) { //이 데이터가 왔으면 profileUser가 작성한 피드만 리스트로 리턴, 안오면 전부다
         super(page, size);
         this.signedUserId = signeduserId;
+        this.profileUserId = profileUserId;
         log.info("page: {}, size: {}, signeduserId: {}", page, size, signeduserId);
     }
 }
