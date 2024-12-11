@@ -120,36 +120,32 @@ public class FeedService {
     //select 3번, 피드 5,000개 있음, 페이지당 20개씩 가져온다.
     public List<FeedGetRes> getFeedList3(FeedGetReq p) {
         //피드 리스트
-        List<FeedGetRes> list = feedMapper.selFeedList(p);
+        List<FeedGetRes> list = feedMapper.selFeedList(p); // 여기서 pic은 null이다.아직, select 한 번.
 
         //feed_id를 골라내야 한다.
-
-        List<Long> feedIds4 = list.stream().map(FeedGetRes::getFeedId).collect(Collectors.toList());//list의 각 feedId 가져와서 List로 각각 넣는다.
-        List<Long> feedIds5 = list.stream().map(item -> ((FeedGetRes)item).getFeedId()).toList();
-        List<Long> feedIds6 = list.stream().map(item -> {return ((FeedGetRes)item).getFeedId();}).toList();
-
         List<Long> feedIds = new ArrayList<>(list.size());
-        for(FeedGetRes item : list){
+        for(FeedGetRes item : list){ //feedId 정리하려고
             feedIds.add(item.getFeedId());
         }
         log.info("feedIds: {}", feedIds);
 
         //피드와 관련된 사진 리스트
-        List<FeedPicSel> feedPicList = feedPicMapper.selFeedPicListByFeedIds(feedIds); //피드Id와 사진
+        List<FeedPicSel> feedPicList = feedPicMapper.selFeedPicListByFeedIds(feedIds); //피드Id와 사진 (맵핑하려고), select 한 번.
         log.info("feedPicList: {}", feedPicList);
 
-        Map<Long, List<String>> picHashMap = new HashMap<>();
+        // 순서 신경안쓰고 가능(해쉬맵)
+        Map<Long, List<String>> picHashMap = new HashMap<>(); //키 타입과, value 타입 설정한 해쉬맵
         for(FeedPicSel item : feedPicList){
             long feedId = item.getFeedId();
-            if(!picHashMap.containsKey(feedId)) { //키값 없는게 true
-                picHashMap.put(feedId, new ArrayList<String>(2)); //키값과 Array공간(value) 저장
+            if(!picHashMap.containsKey(feedId)) { // !있어서 키값 없는게 true
+                picHashMap.put(feedId, new ArrayList<>(3)); //키값과 Array공간 주소값(value) 저장, 사진이 보통 3장정도라서 공간을 3으로 해놓았다.(없어도 됨)
             }
-            List<String> pics = picHashMap.get(feedId); //키값과 공간 pics에 담는다.
-            pics.add(item.getPic());//사진 넣는다.
+            List<String> pics = picHashMap.get(feedId); // feedId 키값에 대응되는 ArrayList공간 주소값이 pics에 담는다.
+            pics.add(item.getPic());//ArrayList 주소값을 가진 pics에 사진을 넣는다.(그러면 ArrayList에 사진들어간다.)
         }
 
-        for(FeedGetRes res : list){
-            res.setPics(picHashMap.get(res.getFeedId()));
+        for(FeedGetRes res : list){ //위에서 정리한거 집어넣으려고
+            res.setPics(picHashMap.get(res.getFeedId())); //feedId 맞게 사진(ArrayList<String> 객체의 주소값) 넣어준다.
         }
 
 
@@ -171,29 +167,29 @@ public class FeedService {
 
         //피드와 관련된 댓글 리스트
         List<FeedCommentDto> feedCommentList = feedCommentMapper.selFeedCommentListByFeedIdsLimit4(feedIds);
-        Map<Long, FeedCommentGetRes> commentHashMap = new HashMap<>();
+        Map<Long, FeedCommentGetRes> commentHashMap = new HashMap<>(); //해쉬맵 하나 만들었다.
         for(FeedCommentDto item : feedCommentList) {
             long feedId = item.getFeedId();
             if(!commentHashMap.containsKey(feedId)) {
                 FeedCommentGetRes feedCommentGetRes = new FeedCommentGetRes();
-                feedCommentGetRes.setCommentList(new ArrayList<>());
-                commentHashMap.put(feedId, feedCommentGetRes);
+                feedCommentGetRes.setCommentList(new ArrayList<>(4));
+                commentHashMap.put(feedId, feedCommentGetRes); //key값, value값 넣어줌
             }
-            FeedCommentGetRes feedCommentGetRes = commentHashMap.get(feedId);
-            feedCommentGetRes.getCommentList().add(item);
+            FeedCommentGetRes feedCommentGetRes = commentHashMap.get(feedId); //value(객체주소값) 넣어줌
+            feedCommentGetRes.getCommentList().add(item); // 여기까지가 new ArrayList<>() 객체주소값 넘오오는 과정
         }
 
-        for(FeedGetRes res : list) {
+        for(FeedGetRes res : list) { //여기서부터 댓글정리
             res.setPics(picHashMap.get(res.getFeedId()));
             FeedCommentGetRes feedCommentGetRes = commentHashMap.get(res.getFeedId());
 
-            if(feedCommentGetRes == null) {
+            if(feedCommentGetRes == null) { //댓글이 null인지 체크
                 feedCommentGetRes = new FeedCommentGetRes();
                 feedCommentGetRes.setCommentList(new ArrayList<>());
                 //res.setComment(feedCommentGetRes); 밑에 중복이라서 빼도됨
             } else if (feedCommentGetRes.getCommentList().size() == 4) {
                 feedCommentGetRes.setMoreComment(true);
-                feedCommentGetRes.getCommentList().remove(feedCommentGetRes.getCommentList().size() - 1);
+                feedCommentGetRes.getCommentList().remove(feedCommentGetRes.getCommentList().size() - 1); //마지막 하나 지우는과정
             }
             res.setComment(feedCommentGetRes);
         }
